@@ -1,0 +1,46 @@
+{
+  "ID" : {
+    "1" : {
+      "Name" : "Amy",
+      "Food" : {
+        "1" : "Birthday_Cake"
+      }
+    },
+    "2" : {
+      "Name" : "Ben",
+      "Food" : {
+        "1" : "Birthday_Cake",
+        "2" : "Fried_Rice"
+      }
+    },
+    "3" : {
+      "Name" : "Fried_Rice",
+      "Food" : {
+        "1" : "Birthday_Cake"
+      }
+    }
+  },
+
+  "Food" : {
+    "Birthday_Cake" : {
+      "Amy" : 1,
+      "Ben" : 2,
+      "Fried_Rice" : 3
+    },
+    "Fried_Rice" : {
+      "Ben" : 2
+    }
+  },
+
+  "Name" : {
+    "Amy" : {
+      "1" : 1
+    },
+    "Ben" : {
+      "1" : 2
+    },
+    "Fried_Rice" : {
+      "1" : 3
+    }
+  }
+}
