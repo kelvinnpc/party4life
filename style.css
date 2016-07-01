@@ -1,0 +1,9 @@
+/* Empty. Add your own CSS if you like */
+pre {
+	padding: 20px;
+	font-size: 20px;
+	border-radius: 15px;
+	background-color: #fafafa;
+	border: 1px solid #999;
+	font-family: 'Courier New', 'Courier', monospaced;
+}
