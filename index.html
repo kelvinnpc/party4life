@@ -41,26 +41,30 @@
 <script src="js/app.js"></script>
 </head>
 <body ng-app="starter">
-
 	<ion-pane>
-	<ion-header-bar class="bar-royal">
-	<h1 class="title">Party4Life</h1>
-</ion-header-bar>
-<div class="bar bar-subheader bar-light">
-	<label class="item item-input">
-		<input id="searchText" type="search" placeholder="Search">
-	</label>
-	<button id = "search" class="button icon ion-search button-royal button-outline"></button>
-</div>
-<ion-content class = "padding has-subheader">
-	<h5>Search Result</h5>
-	<pre></pre>
-</ion-content>
-<div class="bar bar-footer bar-dark">
-   	<button class="button button-assertive">
-   		About Us
-	</button>
-</div>
-</ion-pane>
+		<ion-header-bar class="bar-royal">
+			<h1 class="title">Party4Life</h1>
+			<form action="Templates/Register.html">
+				<button type="submit">register</button>
+			</form>
+				<button class="button" ng-click="Templates/Register.html">Register</button>
+				<button class="button">Login</button>
+		</ion-header-bar>
+	<div class="bar bar-subheader bar-light">
+		<label class="item item-input">
+			<input id="searchText" type="search" placeholder="Search">
+		</label>
+		<button id = "search" class="button icon ion-search button-royal button-outline"></button>
+	</div>
+	<ion-content class = "padding has-subheader">
+		<h5>Search Result</h5>
+		<pre></pre>
+	</ion-content>
+	<div class="bar bar-footer bar-dark">
+	   	<button class="button button-assertive">
+	   		About Us
+		</button>
+	</div>
+	</ion-pane>
 </body>
 </html>
