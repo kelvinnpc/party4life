@@ -3,7 +3,27 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic'])
+angular.module('starter', ['ionic', 'firebase'])
+
+.factory('Auth', function($firebaseAuth) {
+    var endPoint = <YOUR_FIREBASE_URL> ; //Kelvin add your firebase URL here
+    var usersRef = new Firebase(endPoint);
+    return $firebaseAuth(usersRef);
+})
+
+.controller('AppCtrl', function($scope, Auth) { //This will attempt to sign in using redirect if it fails it will use popups as not all OS supports redirects
+  $scope.login = function(authMethod) {
+    Auth.$authWithOAuthRedirect(authMethod).then(function(authData) {
+    }).catch(function(error) {
+      if (error.code === 'TRANSPORT_UNAVAILABLE') {
+        Auth.$authWithOAuthPopup(authMethod).then(function(authData) {
+        });
+      } else {
+        console.log(error);
+      }
+    });
+  };
+})
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -22,6 +42,17 @@ angular.module('starter', ['ionic'])
     }
   });
 })
+
+Auth.$onAuth(function(authData) { //I'm not sure if this function need to write the party4life.prototype.... 
+    if (authData === null) {
+      console.log('Not logged in yet');
+    } else {
+      console.log('Logged in as', authData.uid);
+    }
+    // This will display the user's name in our view
+    $scope.authData = authData;
+});
+
 var ref = new Firebase("https://party4life-45452.firebaseio.com/");
 function party4life(){
   this.checkSetup();
