@@ -43,12 +43,28 @@
 <body ng-app="starter">
 	<ion-pane>
 		<ion-header-bar class="bar-royal">
-			<h1 class="title">Party4Life</h1>
+			<!--
 			<form action="Templates/Register.html">
 				<button type="submit">register</button>
 			</form>
-				<button class="button" ng-click="Templates/Register.html">Register</button>
-				<button class="button">Login</button>
+			-->
+			<!-- new stuff start -->
+			<div class="rol">
+				<div class="col">
+					<h1 class="title">Party4Life</h1>
+				</div>
+				<div id="user-container">
+					<div hidden id="user-pic"></div>
+					<div hidden id="user-name"></div>
+					<button hidden id="sign-out" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
+						Sign-out
+					</button>
+					<button hidden id="sign-in" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
+						Sign-in with Google
+					</button>
+				</div>
+			</div>
+			<!-- new stuff end -->
 		</ion-header-bar>
 	<div class="bar bar-subheader bar-light">
 		<label class="item item-input">

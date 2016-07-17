@@ -22,73 +22,101 @@ angular.module('starter', ['ionic'])
     }
   });
 })
-var ref = new Firebase("https://party4life-45452.firebaseio.com/");
+
 function party4life(){
   this.checkSetup();
 
   this.search = document.getElementById('search');
-  
+  //new stuff start
+  this.signInButton = document.getElementById('sign-in');
+  this.signOutButton = document.getElementById('sign-out');
+  this.signInSnackbar = document.getElementById('must-signin-snackbar');
+  this.userPic = document.getElementById('user-pic');
+  this.userName = document.getElementById('user-name');
+  //new stuff end
+
   this.search.addEventListener('click', this.SearchButton.bind(this));
+  this.signOutButton.addEventListener('click', this.signOut.bind(this));//new
+  this.signInButton.addEventListener('click', this.signIn.bind(this));//new
   //this.searchInput.addEventListener('input', this.updateSearchInput.bind(this));
 
   this.initFirebase();
 }
 
+//new stuff start
+// Signs-in Friendly Chat.
+party4life.prototype.signIn = function(googleUser) {
+  // TODO(DEVELOPER): Sign in Firebase with credential from the Google user.
+  var provider = new firebase.auth.GoogleAuthProvider();
+  this.auth.signInWithPopup(provider);
+};
+
+// Signs-out of Friendly Chat.
+party4life.prototype.signOut = function() {
+  // TODO(DEVELOPER): Sign out of Firebase.
+  this.auth.signOut();
+  this.auth.onAuthStateChanged(this.onAuthStateChanged.bind(this));
+};
+
+// Triggers when the auth state change for instance when the user signs-in or signs-out.
+party4life.prototype.onAuthStateChanged = function(user) {
+  if (user) { // User is signed in!
+    // Get profile pic and user's name from the Firebase user object.
+    var profilePicUrl = user.photoURL;   // TODO(DEVELOPER): Get profile pic.
+    var userName = user.displayName;        // TODO(DEVELOPER): Get user's name.
+
+    // Set the user's profile pic and name.
+    this.userPic.style.backgroundImage = 'url(' + profilePicUrl + ')';
+    this.userName.textContent = userName;
+
+    // Show user's profile and sign-out button.
+    this.userName.removeAttribute('hidden');
+    this.userPic.removeAttribute('hidden');
+    this.signOutButton.removeAttribute('hidden');
+
+    // Hide sign-in button.
+    this.signInButton.setAttribute('hidden', 'true');
+
+  } else { // User is signed out!
+    // Hide user's profile and sign-out button.
+    this.userName.setAttribute('hidden', 'true');
+    this.userPic.setAttribute('hidden', 'true');
+    this.signOutButton.setAttribute('hidden', 'true');
+
+    // Show sign-in button.
+    this.signInButton.removeAttribute('hidden');
+  }
+};
+// new stuff end
+
 party4life.prototype.initFirebase = function(){
   this.auth = firebase.auth();
   this.database = firebase.database();
   this.storage = firebase.storage();
-  //this.auth.onAuthStateChanged(this.onAuthStateChanged.bind(this));
+  this.auth.onAuthStateChanged(this.onAuthStateChanged.bind(this));//new
 };
 /*
 party4life.prototype.updateSearchInput = function() {
-
 }
 */
 party4life.prototype.SearchButton = function() {
   var searchInput = document.getElementById('searchText');
   searchInput.value = searchInput.value.replace(' ', '_');
-  var obj = "";
 
+  var ref = new Firebase("https://party4life-45452.firebaseio.com/");
   ref.on('child_added', function(snapshot){
-    var searchResult = snapshot.child(searchInput.value);
-    if(searchResult.val() != null) {
-      searchResult.forEach(function(snap){
-        obj = party4life.prototype.makeDisplay(snap.val(), obj) + '\n';
-      }) 
-    }
-    $('pre').text(obj.toString());
-    console.log(obj);
-  })
-};
-/*
-party4life.prototype.show = function(snap) {
-  var obj = snap.val();
-  $('pre').text(obj ? JSON.stringify(obj, null, 2) : 'not found');
-}
-*/
-party4life.prototype.makeDisplay = function(id, obj) {
-  ref.child('ID/'+ id).on('value', function(snapshot){
-    snapshot.forEach(function(snap){
-      //console.log(snap.key() + ": " + snap.val());
-      obj = obj + snap.key() + ": " + snap.val() + '\n';
-    })
-    
-    //console.log("Test 1");
-    /*console.log("snap: " + snapshot.key());
-    //console.log("id: " + id);
-    if(snapshot.key() === id.toString()){
-      var name = snapshot.child(Name).val();
-      console.log("Name: " + name);
-      snapshot.Food.forEach(function(snap){
-        var food = snap.val();
-        console.log("Food: " + food);
+    var test = snapshot.child(searchInput.value);
+    if(test.val() != null) {
+      test.forEach(function(snap){
+        console.log("ID: " + snap.val());
       })
+    }
+    /*if(searchInput.value === searchResult.provider){
+      console.log("Provider: " + searchResult.provider);
+      console.log("Items: " + searchResult.items);
     }*/
   })
-  return obj;
-};
-
+}
 /*
 party4life.prototype.SearchButton = function(){
   var ref = new Firebase("https://party4life-45452.firebaseio.com/");

@@ -1,0 +1,37 @@
+/* Empty. Add your own CSS if you like */
+pre {
+	padding: 20px;
+	font-size: 20px;
+	border-radius: 15px;
+	background-color: #fafafa;
+	border: 1px solid #999;
+	font-family: 'Courier New', 'Courier', monospaced;
+}
+#user-container {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  top: 5px;
+  width: 100%;
+  right: 0;
+  padding-left: 10px;
+  justify-content: flex-end;
+  padding-right: 10px;
+}
+#user-container #user-pic {
+  top: -3px;
+  position: relative;
+  display: inline-block;
+  background-image: url('/images/profile_placeholder.png');
+  background-repeat: no-repeat;
+  width: 40px;
+  height: 40px;
+  background-size: 40px;
+  border-radius: 20px;
+}
+#user-container #user-name {
+  font-size: 16px;
+  line-height: 36px;
+  padding-right: 10px;
+  padding-left: 20px;
+}
