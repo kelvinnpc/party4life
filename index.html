@@ -1,34 +1,99 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-    <title></title>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+	<title></title>
 
-    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
+	<script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+	<link href="lib/ionic/css/ionic.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet">
+
+	<!--Material Design Lite-->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  	<link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.orange-indigo.min.css">
+  	<script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+
+	<!--Firebase script-->
+	<script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.0.5/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.0.5/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.0.5/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.0.5/firebase-storage.js"></script>
+	<script>
+      // Initialize Firebase
+      var config = {
+      	apiKey: "AIzaSyDfskGbm_DRr6qazxTMAkMZGMafmzvGmPM",
+      	authDomain: "party4life-45452.firebaseapp.com",
+      	databaseURL: "https://party4life-45452.firebaseio.com",
+      	storageBucket: "party4life-45452.appspot.com",
+      };
+      firebase.initializeApp(config);
+  </script>
 
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
     <link href="css/ionic.app.css" rel="stylesheet">
-    -->
+-->
 
-    <!-- ionic/angularjs js -->
-    <script src="lib/ionic/js/ionic.bundle.js"></script>
+<!-- ionic/angularjs js -->
+<script src="lib/ionic/js/ionic.bundle.js"></script>
 
-    <!-- cordova script (this will be a 404 during development) -->
-    <script src="cordova.js"></script>
+<!-- cordova script (this will be a 404 during development) -->
+<script src="cordova.js"></script>
 
-    <!-- your app's js -->
-    <script src="js/app.js"></script>
-  </head>
-  <body ng-app="starter">
-
-    <ion-pane>
-      <ion-header-bar class="bar-stable">
-        <h1 class="title">Ionic Blank Starter</h1>
-      </ion-header-bar>
-      <ion-content>
-      </ion-content>
-    </ion-pane>
-  </body>
+<!-- your app's js -->
+<script src="js/app.js"></script>
+</head>
+<body ng-app="starter">
+	<ion-pane>
+		<ion-header-bar class="bar-royal">
+			<!--
+			<form action="Templates/Register.html">
+				<button type="submit">register</button>
+			</form>
+			-->
+			<!-- new stuff start -->
+			<div class="rol">
+				<div class="col">
+					<h1 class="title">Party4Life</h1>
+				</div>
+				<div id="user-container">
+					<div hidden id="user-pic"></div>
+					<button hidden id="user-name" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white"></button>
+					<button hidden id="sign-out" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color--blue-500 mdl-color-text--white">
+						Sign-out
+					</button>
+					<button hidden id="sign-in" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color--blue-500 mdl-color-text--white">
+						Sign-in with Google
+					</button>
+				</div>
+			</div>
+			<!-- new stuff end -->
+		</ion-header-bar>
+	<div class="bar bar-subheader bar-light">
+		<label class="item item-input">
+			<input id="searchText" type="search" placeholder="Search">
+		</label>
+		<button id = "search" class="button icon ion-search button-royal button-outline"></button>
+	</div>
+	<ion-content id="search-result" class = "padding has-subheader">
+		<h5>Search Result</h5>
+		<pre></pre>
+		<div class= "row"></div>
+		<div class="row">
+			<button id="add" class="button icon icon-right ion-plus-circled button-assertive">Add</button>
+			<button id="remove" class="button icon icon-right ion-minus-circled button-positive">Remove</button>
+		</div>
+		<label class="item item-input">
+			<input id="update" type="text" placeholder="Type food provided here">
+		</label>
+	</ion-content>
+	<div class="bar bar-footer bar-dark">
+	   	<button class="button button-assertive">
+	   		About Us
+		</button>
+	</div>
+	</ion-pane>
+</body>
 </html>
