@@ -42,6 +42,7 @@ function party4life(){
   this.searchDisplay = document.getElementById('search-result');
   this.addButton = document.getElementById('add');
   this.removeButton = document.getElementById('remove');
+  document.getElementById('pre').style.display="none";
   //new stuff end
 
   this.search.addEventListener('click', this.SearchButton.bind(this));
@@ -68,7 +69,14 @@ party4life.prototype.addFood = function() {
   refIdFood.once('value', function(snap){
     foodArray = snap.exportVal();
     var numFood = snap.numChildren();
-    foodArray[numFood] = newFood.value;
+    //console.log("foodArray[0]: " + foodArray[0]);
+    if(foodArray[0] === ""){
+      foodArray[0] = newFood.value;
+    }
+    else{
+      foodArray[numFood] = newFood.value;
+    }
+    
     refIdFood.set(foodArray);
     //console.log("numFood: " + numFood);
     //console.log("foodArray: " + JSON.stringify(foodArray));
@@ -109,19 +117,25 @@ party4life.prototype.removeFood = function() {
         var index = snapshot.numChildren() - 1;
         var lastFood = snapshot.child(index).val();
         //console.log("lastFood: " + lastFood);
-        foodArray[snap.key()] = lastFood;
-        delete foodArray[index];
+        if(index === 0){
+          foodArray[0] = "";
+        }
+        else{
+          foodArray[snap.key()] = lastFood;
+          delete foodArray[index];
+        }
+        
         refIdFood.set(foodArray);
 
         //clear Food section
         var refFood = ref.child('Food/' + byeFood.value);
         refFood.once('value', function(snapshot){
           var foodProvider = snapshot.exportVal();
-          console.log("foodProvider1: " + JSON.stringify(foodProvider));
+          //console.log("foodProvider1: " + JSON.stringify(foodProvider));
           delete foodProvider[userName];
           refFood.set(foodProvider);
-          console.log("foodProvider2: " + JSON.stringify(foodProvider));
-          console.log("user: " + userName);
+          //.log("foodProvider2: " + JSON.stringify(foodProvider));
+          //console.log("user: " + userName);
         })
       }
     })
@@ -132,38 +146,19 @@ party4life.prototype.removeFood = function() {
 // Signs-in Friendly Chat.
 party4life.prototype.signIn = function(googleUser) {
   // TODO(DEVELOPER): Sign in Firebase with credential from the Google user.
-  
+  //this.auth.onAuthStateChanged(this.onAuthStateChanged.bind(this));
   var provider = new firebase.auth.GoogleAuthProvider();
   this.auth.signInWithPopup(provider).then(function(result) {
+    userName = result.user.displayName;
+    userName = userName.toLowerCase();
+    userName = userName.replace(' ', '_');
     userEmail = result.user.email;
     userEmail = userEmail.replace('.', ',');
-    //console.log("email " + userEmail);
-    /*
-    var userFound = false;
-    ref.child('Email').on('value', function(snap){
-      console.log("snap: " + snap.child("email").val());
-      var snapshot = snap.child("email");
-      if(snapshot.val() === userEmail){
-        userFound = true;
-        //console.log("dont create new");
-        console.log("userfound: " + userFound);
-      }
-    })
-
-    console.log("userfound 2 " + userFound);
-    
-    if(userFound === false) {
-      var newRef = ref.child('Email').push();
-      newRef.set({
-        "email" : userEmail
-      });
-    }
-    */
     
     ref.child('Email/' + userEmail).once('value', function(snapshot){
       //console.log("snap " + snapshot.val());
       if(snapshot.val() === null) {
-        console.log("create new");
+        //console.log("create new");
         var newref = ref.child('ID').push();
         id = newref.key();
         newref.set({
@@ -172,6 +167,9 @@ party4life.prototype.signIn = function(googleUser) {
             },
             "Name" : {
               0 : userName
+            },
+            "Email" : {
+              0 : userEmail
             }
         });
         foo = {};
@@ -180,7 +178,7 @@ party4life.prototype.signIn = function(googleUser) {
         foo = {};
         foo[userName] = {0 : id};
         ref.child('Name').update(foo);
-        console.log("key: " + id);
+        //console.log("key: " + id);
         //ref.child('Email/'+userEmail+"/"+id).set();
       }
       else{
@@ -217,6 +215,9 @@ party4life.prototype.onAuthStateChanged = function(user) {
     this.userName.removeAttribute('hidden');
     this.userPic.removeAttribute('hidden');
     this.signOutButton.removeAttribute('hidden');
+    this.addButton.removeAttribute('hidden');
+    this.removeButton.removeAttribute('hidden');
+    document.getElementById('foodBox').style.display="block";
 
     // Hide sign-in button.
     this.signInButton.setAttribute('hidden', 'true');
@@ -226,6 +227,9 @@ party4life.prototype.onAuthStateChanged = function(user) {
     this.userName.setAttribute('hidden', 'true');
     this.userPic.setAttribute('hidden', 'true');
     this.signOutButton.setAttribute('hidden', 'true');
+    this.addButton.setAttribute('hidden', 'true');
+    this.removeButton.setAttribute('hidden', 'true');
+    document.getElementById('foodBox').style.display="none";
 
     // Show sign-in button.
     this.signInButton.removeAttribute('hidden');
@@ -260,6 +264,8 @@ party4life.prototype.goProfile = function() {
     obj = party4life.prototype.makeDisplay(snapshot.val(), obj) + '\n';
     $('pre').text(obj.toString());
   })
+  document.getElementById("textHead").innerHTML = "Profile";
+  document.getElementById("pre").style.display="block";
 }
 
 party4life.prototype.SearchButton = function() {
@@ -276,17 +282,23 @@ party4life.prototype.SearchButton = function() {
       }) 
     }
     $('pre').text(obj.toString());
-    console.log(obj);
+    //console.log(obj);
   })
+  document.getElementById("textHead").innerHTML = "Search Result";
+  document.getElementById("pre").style.display = "block";
 }
 
 party4life.prototype.makeDisplay = function(id, obj) {
   ref.child('ID/'+ id).on('value', function(snapshot){
-    console.log("snapshoppy: " + JSON.stringify(snapshot.child("Food").val()));
+    //console.log("snapshoppy: " + JSON.stringify(snapshot.child("Food").val()));
     snapshot.forEach(function(snap){
       //console.log(snap.key() + ": " + snap.val());
-      console.log("snappy: " + snap.val());
-      obj = obj + snap.key() + ": " + snap.val() + '\n';
+      var content = snap.val();
+      if(snap.key() === "Email") {
+        content[0] = content[0].replace(',','.');
+      }
+      //console.log("snappy: " + snap.val());
+      obj = obj + snap.key() + ": " + content + '\n';
     })
   })
   return obj;
